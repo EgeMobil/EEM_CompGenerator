@@ -5,6 +5,13 @@ public class Definition {
    private StructureDefinition[] structures;
    private EnumDefinition[] enums;
 
+   public Definition(DataDefinition[] _datas , StructureDefinition[] _structures , EnumDefinition[] _enums )
+   {
+	   this.datas = _datas;
+	   this.structures = _structures;
+	   this.enums = _enums;
+   }
+   
    public DataDefinition[] getDatas() {
       return this.datas;
    }

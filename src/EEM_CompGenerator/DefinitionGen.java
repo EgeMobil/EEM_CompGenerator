@@ -5,21 +5,33 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class DefinitionGen extends CodeGenerator implements Namespaces, Functionallity {
-   Definition defs;
+   
+   private Definition defs;
 
-   public DefinitionGen(String _compName) {
-      super(_compName);
+   public DefinitionGen(String _compName , String _author , String[] _otherComps) {
+      super(_compName, _author, _otherComps, null );
    }
-
+    
    public DefinitionGen() {
-      super("NOT_ENTERED");
+      super("NOT_ENTERED", null, null, null);
    }
 
-   public void setDefs(DataDefinition[] _data, StructureDefinition[] _struct, EnumDefinition[] _enum) {
-      this.defs = new Definition();
-      this.defs.setDatas(_data);
-      this.defs.setStructures(_struct);
-      this.defs.setEnums(_enum);
+   public void setDefs(Definition _def) {
+      
+	  this.defs = _def; 
+	  
+      EnumDefinition baseEnum = new EnumDefinition(
+			  "dt" + super.getComponentName() + "Return", 
+			  super.getComponentName() + "Base Return Type Definition" ,
+			  new String[]{
+					  super.getComponentName().toUpperCase() + "_" + ERR + " = 0 ,", 
+					  super.getComponentName().toUpperCase() + "_" + EOK + " ,", 
+					  super.getComponentName().toUpperCase() + "_" + UNKNOWN + " ,", 
+					  }
+			  );
+           
+      this.appendBaseEnum(baseEnum);   
+      
    }
 
    public String toString() {
@@ -31,37 +43,47 @@ public class DefinitionGen extends CodeGenerator implements Namespaces, Function
       fileName = this.getComponentName().toString() + "_definition.h";
       return fileName;
    }
+   
+	public void appendBaseEnum(EnumDefinition newEnum) {
+    	
+    	EnumDefinition[] newFields = new EnumDefinition[ this.defs.getEnums().length + 1];
+	    newFields[0] = newEnum;
 
-   public void headerCommentPhase() {
-      List<String> headerComment = new ArrayList<String>();
+	    System.arraycopy( this.defs.getEnums(), 0, newFields, 1, this.defs.getEnums().length );
+
+	    this.defs.setEnums( newFields );
+	}
+
+   public void headerCommentPhase(List<String> phase) {
+	   
       this.setDate(LocalDate.now());
-      headerComment.add("/* ");
-      headerComment.add(" * " + this.nameGeneration());
-      headerComment.add(" * ");
-      headerComment.add(" *  Created on: " + String.valueOf(this.getDate()));
-      headerComment.add(" *      Author: " + this.getAuthor());
-      headerComment.add("*/ ");
-      headerComment.add(" ");
-      super.addLines(headerComment);
+      phase.add("/* ");
+      phase.add(" * " + this.nameGeneration());
+      phase.add(" * ");
+      phase.add(" *  Created on: " + String.valueOf(this.getDate()));
+      phase.add(" *      Author: " + this.getAuthor());
+      phase.add("*/ ");
+      phase.add(" ");
+      super.addLines(phase);
    }
 
-   public void headerPhase() {
-      List<String> phase = new ArrayList<String>();
+   public void headerPhase(List<String> phase) {
       
-      phase.add("#ifndef " + this.getComponentName().toUpperCase() + "_INC_" + this.getComponentName().toUpperCase() + "_H_");
-      phase.add("#define " + this.getComponentName().toUpperCase() + "_INC_" + this.getComponentName().toUpperCase() + "_H_");
+      phase.add("#ifndef " + this.getComponentName().toUpperCase() + "_INC_" + this.getComponentName().toUpperCase() + "_DEFINITION_H_");
+      phase.add("#define " + this.getComponentName().toUpperCase() + "_INC_" + this.getComponentName().toUpperCase() + "_DEFINITION_H_");
       phase.add(" ");
       
       this.activePhase(phase);
       
       phase.add(" ");
-      phase.add("#endif /* " + this.getComponentName().toUpperCase() + "_INC_" + this.getComponentName().toUpperCase() + "_H_ */ ");
+      phase.add("#endif /* " + this.getComponentName().toUpperCase() + "_INC_" + this.getComponentName().toUpperCase() + "_DEFINITION_H_ */ ");
       super.addLines(phase);
    }
 
    public void activePhase(List<String> phase) {
 	  
 	  int loopVal=0;
+	  int loopVal2=0;
 	  
       DataDefinition[] datas;
       int dataSize = (datas = this.defs.getDatas()).length;
@@ -90,10 +112,10 @@ public class DefinitionGen extends CodeGenerator implements Namespaces, Function
          phase.add("typedef struct ");
          phase.add("{");
 
-         for(loopVal = 0; loopVal < Math.min(str.getFieldTypes().length, str.getFields().length); ++loopVal) 
+         for(loopVal2 = 0; loopVal2 < Math.min(str.getFieldTypes().length, str.getFields().length); ++loopVal2) 
          {
-            phase.add("    /* " + str.getDataComments()[loopVal] + " */");
-            phase.add("    "    + str.getFieldTypes()[loopVal] + " " + str.getFields()[loopVal] + ";");
+            phase.add("    /* " + str.getDataComments()[loopVal2] + " */");
+            phase.add("    "    + str.getFieldTypes()[loopVal2] + " " + str.getFields()[loopVal2] + ";");
          }
 
          phase.add("}" + str.getStructureName() + "Type;");
@@ -102,8 +124,9 @@ public class DefinitionGen extends CodeGenerator implements Namespaces, Function
 
       EnumDefinition[] enms;
       int enmSize = (enms = this.defs.getEnums()).length;
-
-      for(loopVal = 0; loopVal < enmSize; ++loopVal) {
+      
+      for(loopVal = 0; loopVal < enmSize; ++loopVal) 
+      {
          EnumDefinition enm = enms[loopVal];
          phase.add("/**");
          phase.add(" * @brief Enum definition ");
@@ -112,9 +135,9 @@ public class DefinitionGen extends CodeGenerator implements Namespaces, Function
          phase.add(" */");
          phase.add("typedef enum ");
          phase.add("{");
-
-         for(loopVal = 0; loopVal < enm.getFields().length; ++loopVal) {
-            phase.add("    " + enm.getFields()[loopVal].toUpperCase() + " = " + loopVal + " ,");
+         
+         for(loopVal2 = 0; loopVal2 < enm.getFields().length; ++loopVal2) {
+            phase.add("    " + enm.getFields()[loopVal2].toUpperCase() + " = " + loopVal2 + " ,");
          }
 
          phase.add("}" + enm.getEnumName() + "Type;");
@@ -123,9 +146,24 @@ public class DefinitionGen extends CodeGenerator implements Namespaces, Function
 
    }
 
-   public void sourceCommentPhase() {
+   public void sourceCommentPhase(List<String> phase) {
+	   
    }
-
-   public void sourcePhase() {
+   public void sourcePhase(List<String> phase) {
    }
+   
+   public String build()
+   {	 
+	   List<String> phase = new ArrayList<String>();
+	   phase.add("/*************START OF FILE*********************/");
+	   this.headerCommentPhase(phase);
+	   this.headerPhase(phase);
+	   this.sourceCommentPhase(phase);
+	   this.sourcePhase(phase);
+	   phase.add("/*************END OF FILE***********************/");
+	   super.addLines(phase);
+	   
+	   return super.build();   
+   }
+   
 }

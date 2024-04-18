@@ -1,19 +1,23 @@
 package EEM_CompGenerator;
 
 public class StructureDefinition implements Namespaces {
+   
+   private String structComment;
    private String structureName;
+   
    private String[] fieldTypes;
    private String[] fields;
-   private String structComment;
    private String[] dataComments;
 
-   public StructureDefinition(String _structureName, String[] _fieldTypes, String[] _fields) {
-      this.structureName = _structureName;
-      this.fieldTypes = _fieldTypes;
-      this.fields = _fields;
+   public StructureDefinition(String _structureName, String _structComment , String[] _fieldTypes, String[] _fields, String[] _dataComments) {
+	   this.structureName = _structureName;
+	   this.structComment = _structComment;
+	   this.fieldTypes = _fieldTypes;
+	   this.fields = _fields;
+	   this.dataComments = _dataComments;
    }
 
-   public String getStructureName() {
+public String getStructureName() {
       return this.structureName;
    }
 

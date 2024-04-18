@@ -5,6 +5,14 @@ public class DataDefinition implements Namespaces {
    private String dataType;
    private String dataComment;
 
+   /* Constructor */
+   public DataDefinition(String _dataName, String _dataType, String _dataComment) {
+	   this.dataName = _dataName;
+	   this.dataType = _dataType;
+	   this.dataComment = _dataComment;
+   }
+
+/* Get/Set Methods */
    public String getDataName() {
       return this.dataName;
    }

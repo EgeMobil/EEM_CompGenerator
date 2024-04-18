@@ -2,23 +2,20 @@ package EEM_CompGenerator;
 
 import java.util.List;
 
-public interface Functionallity {
-   String PREPROCESSOR = "#";
-   String ANGLEBRAKELETLEFT = "<";
-   String ANGLEBRAKELETRIGHT = ">";
-   String SEMICOLON = ";";
-   String BRACELEFT = "(";
-   String BRACERIGHT = ")";
-   String CURLYLEFT = "{";
-   String CURLYRIGHT = "}";
+public abstract interface Functionallity {
+   public String PREPROCESSOR = "#";
+   public String ANGLEBRAKELETLEFT = "<";
+   public String ANGLEBRAKELETRIGHT = ">";
+   public String SEMICOLON = ";";
+   public String BRACELEFT = "(";
+   public String BRACERIGHT = ")";
+   public String CURLYLEFT = "{";
+   public String CURLYRIGHT = "}";
 
-   void headerCommentPhase();
-
-   void headerPhase();
-
-   void sourceCommentPhase();
-
-   void sourcePhase();
-
-   void activePhase(List<String> var1);
+   public void headerCommentPhase(List<String> phase);
+   public void headerPhase(List<String> phase);
+   public void sourceCommentPhase(List<String> phase);
+   public void sourcePhase(List<String> phase);
+   public void activePhase(List<String> phase);
+     
 }

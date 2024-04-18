@@ -9,6 +9,7 @@ public interface Namespaces {
    String DEFINE = "define ";
    String IFNDEF = "ifndef ";
    String INCLUDE = "include ";
+   String EXTERN = "extern ";
    String IF = "if ";
    String ELIF = "elif ";
    String ELSE = "else ";
@@ -28,6 +29,10 @@ public interface Namespaces {
    String CHARTYPE = "char ";
    String STRUCTTYPE = "struct ";
    String UNIONTYPE = "union ";
-
+   
+   String ERR = "ERR ";
+   String EOK = "EOK ";
+   String UNKNOWN = "UNKNOWN ";
+   
    String nameGeneration();
 }

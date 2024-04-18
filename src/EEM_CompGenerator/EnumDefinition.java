@@ -1,12 +1,13 @@
 package EEM_CompGenerator;
 
 public class EnumDefinition implements Namespaces {
-   private String enumName;
-   private String[] fields;
-   private String enumComment;
+   protected String enumName;
+   protected String[] fields;
+   protected String enumComment;
 
-   public EnumDefinition(String _enumName, String[] fields) {
+   public EnumDefinition(String _enumName, String _enumComment, String[] fields) {
       this.enumName = _enumName;
+      this.enumComment = _enumComment;
       this.fields = fields;
    }
 
@@ -28,12 +29,12 @@ public class EnumDefinition implements Namespaces {
 
    public String getEnumComment() {
       return this.enumComment;
-   }
+   } 
 
    public void setEnumComment(String enumComment) {
       this.enumComment = enumComment;
    }
-
+   
    public String nameGeneration() {
       return null;
    }
