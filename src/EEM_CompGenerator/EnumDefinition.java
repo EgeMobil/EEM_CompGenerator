@@ -31,7 +31,7 @@ public class EnumDefinition implements Namespaces {
       return this.enumComment;
    } 
 
-   public void setEnumComment(String enumComment) {
+   public void setEnumComment(String enumComment ) {
       this.enumComment = enumComment;
    }
    
